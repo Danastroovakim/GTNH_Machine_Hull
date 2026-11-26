@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>GTNH Machine Hull v7.0</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="logo.svg" alt="GTNH Machine Hull" class="brand-logo">
+        <div class="brand-text">
+          <div class="brand-title">
+            <span>Machine Hull</span>
+            <span class="brand-ver" id="app-ver-pill">v7.0</span>
+          </div>
+          <span class="brand-sub">GT: New Horizons</span>
+        </div>
+      </div>
+
+      <div class="server-pill" onclick="handleServerPillClick()" title="Открыть обзор сервера или настройки подключения">
+        <div class="server-pill-top">
+          <span class="status-indicator">
+            <span id="sb-dot" class="status-dot"></span>
+            <span id="sb-server-name" class="server-name">Локальный режим</span>
+          </span>
+        </div>
+        <div class="server-pill-meta">
+          <span id="sb-status-text">Не подключён</span>
+          <span id="sb-ws-chip" class="ws-chip">OFF</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu" aria-label="Разделы">
+        <button class="nav-item active" data-view="console" onclick="switchView('console')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          <span>Обзор и Консоль</span>
+        </button>
+
+        <button class="nav-item" data-view="backups" onclick="switchView('backups')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Бэкапы и Откат</span>
+          <span id="nav-backup-count" class="nav-badge">0</span>
+        </button>
+
+        <button class="nav-item" data-view="updater" onclick="switchView('updater')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          <span>Обновление сборки</span>
+          <span id="nav-updater-busy" class="nav-badge hidden" style="background:var(--accent-soft);color:var(--accent);">...</span>
+        </button>
+
+        <button class="nav-item" data-view="configs" onclick="switchView('configs')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          <span>Студия Конфигов</span>
+        </button>
+
+        <button class="nav-item" data-view="settings" onclick="switchView('settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Подключение</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div id="sidebar-task" class="sidebar-task hidden">
+          <div class="sidebar-task-head">
+            <span id="sb-task-label">Операция</span>
+            <span id="sb-task-pct" class="mono">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="sb-task-bar" class="progress-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="sidebar-actions">
+          <button class="btn btn-sm" onclick="runDiag()" title="Диагностика сервера и измерений">Диагностика</button>
+          <button class="btn btn-sm btn-ghost" onclick="openDataDir()" title="Открыть папку с настройками">Данные</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN WORKSPACE -->
+    <div class="workspace">
+      <!-- Global Live Progress Banner -->
+      <div id="global-progress" class="global-progress hidden">
+        <div class="global-progress-info">
+          <div class="global-progress-top">
+            <span id="gp-label" class="global-progress-label">Выполнение...</span>
+            <span id="gp-pct" class="mono" style="font-size:12px;color:var(--accent);">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="gp-bar" class="progress-fill" style="width:0%"></div>
+          </div>
+          <div id="gp-detail" class="global-progress-detail" style="margin-top:4px;"></div>
+        </div>
+        <button id="gp-dismiss" class="btn btn-sm btn-ghost hidden" onclick="hideGlobalProgress()">Скрыть</button>
+      </div>
+
+      <!-- ================================================================ -->
+      <!-- VIEW 1: ОБЗОР И КОНСОЛЬ                                          -->
+      <!-- ================================================================ -->
+      <section id="view-console" class="view view-fixed">
+        <div id="onboarding-banner" class="onboarding-banner hidden">
+          <div>
+            <h3>Добро пожаловать в GTNH Machine Hull</h3>
+            <p>Сервер Bisquit.Host ещё не настроен. Вы можете подключить сервер для управления консолью и бэкапами или сразу обновлять локальный клиент Prism Launcher без API-ключа.</p>
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0;">
+            <button class="btn btn-primary" onclick="switchView('settings')">Подключить сервер</button>
+            <button class="btn" onclick="openClientUpdaterDirect()">Обновить клиент</button>
+          </div>
+        </div>
+
+        <div class="console-toolbar">
+          <div class="power-group">
+            <button class="btn btn-ok" onclick="power('start')">Запустить</button>
+            <button class="btn btn-warn" onclick="power('restart')">Перезагрузить</button>
+            <button class="btn btn-danger" onclick="power('stop')">Остановить</button>
+            <button class="btn btn-ghost btn-sm" onclick="confirmKill()" title="Принудительно завершить процесс (использовать только при зависании)">Kill</button>
+          </div>
+          <div class="quick-cmds">
+            <button class="cmd-chip" onclick="insertCmd('forge tps', true)">forge tps</button>
+            <button class="cmd-chip" onclick="insertCmd('backup start', true)">backup start</button>
+            <button class="cmd-chip" onclick="insertCmd('list', true)">list</button>
+            <button class="cmd-chip" onclick="insertCmd('save-all', true)">save-all</button>
+            <button class="cmd-chip" onclick="insertCmd('dump_chunkloaders', true)">chunkloaders</button>
+            <button class="cmd-chip" onclick="insertCmd('whitelist add ', false)">whitelist add</button>
+          </div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card clickable" onclick="insertCmd('forge tps', true)" title="Нажмите, чтобы запросить актуальный forge tps">
+            <div class="metric-top">
+              <span>TPS / MSPT</span>
+              <span id="stat-players-badge" class="badge badge-neutral mono">0 онлайн</span>
+            </div>
+            <div id="stat-tps" class="metric-val">20.0 TPS</div>
+            <div id="stat-lag" class="metric-sub mono">Лаг-спайк: 0ms (0t)</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top">
+              <span>Процессор (CPU)</span>
+              <span id="stat-cpu-lim" class="mono">100%</span>
+            </div>
+            <div id="stat-cpu" class="metric-val">0.0%</div>
+            <div class="progress-track"><div id="bar-cpu" class="progress-fill info" style="width:0%"></div></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top">
+              <span>Память (RAM)</span>
+              <span id="stat-ram-lim" class="mono">—</span>
+            </div>
+            <div id="stat-ram" class="metric-val">0.0 GiB</div>
+            <div class="progress-track"><div id="bar-ram" class="progress-fill ok" style="width:0%"></div></div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-top">
+              <span>Диск</span>
+              <span id="stat-disk-lim" class="mono">—</span>
+            </div>
+            <div id="stat-disk" class="metric-val">0.0 GiB</div>
+            <div class="progress-track"><div id="bar-disk" class="progress-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="terminal-card">
+          <div class="terminal-head">
+            <div class="terminal-head-left">
+              <span id="ws-badge" class="ws-chip">POLL</span>
+              <select id="log-source-select" class="select" style="padding:4px 8px;font-size:12px;" onchange="changeLogSource()">
+                <option value="auto">Live поток (WebSocket + авто)</option>
+                <option value="fml">Полный FML лог (fml-server-latest.log)</option>
+                <option value="latest">Обычный лог (/logs)</option>
+              </select>
+            </div>
+            <div class="terminal-head-right">
+              <input id="log-search" class="input" style="width:170px;padding:4px 8px;font-size:12px;" type="text" placeholder="Поиск по логам..." oninput="applyFilter()">
+              <label id="filter-warn-label" class="filter-pill" title="Скрыть обычные INFO-строки">
+                <input type="checkbox" id="filter-warn" onchange="applyFilter()"> Warn/Lag
+              </label>
+              <button class="btn btn-sm btn-ghost" onclick="copyLogs()">Копировать</button>
+              <button class="btn btn-sm btn-ghost" onclick="clearLogs()">Очистить</button>
+            </div>
+          </div>
+
+          <div id="log-container" class="terminal-body"></div>
+
+          <div class="terminal-input-bar">
+            <span class="terminal-prompt">&gt;</span>
+            <input id="cmd-input" class="input" type="text" placeholder="Введите команду сервера (forge tps, backup start, list, stop)...">
+            <button class="btn btn-primary" onclick="sendCmd()">Отправить</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- VIEW 2: БЭКАПЫ И ОТКАТ                                           -->
+      <!-- ================================================================ -->
+      <section id="view-backups" class="view view-fixed hidden">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Бэкапы и Откат</h2>
+            <p class="view-subtitle">Архивы мира ServerUtilities, облачные снапшоты панели и локальные копии клиента Prism Launcher</p>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <div class="tabs">
+              <button id="btab-mod" class="tab-btn active" onclick="switchBackupTab('mod')">
+                Архивы сервера <span id="bcount-mod" class="tab-count">0</span>
+              </button>
+              <button id="btab-panel" class="tab-btn" onclick="switchBackupTab('panel')">
+                Облако панели <span id="bcount-panel" class="tab-count">0</span>
+              </button>
+              <button id="btab-client" class="tab-btn" onclick="switchBackupTab('client')">
+                Клиент (Prism) <span id="bcount-client" class="tab-count">0</span>
+              </button>
+            </div>
+            <button class="btn btn-sm" onclick="refreshBackups(true)">Обновить</button>
+          </div>
+        </div>
+
+        <div id="backup-bar-mod" style="display:flex;gap:8px;flex-shrink:0;">
+          <button class="btn btn-primary btn-sm" onclick="triggerModBackup()">Быстрый бэкап (/backup start)</button>
+          <button class="btn btn-ok btn-sm" onclick="compressWorldNow()">Полный архив мира (.tar.gz)</button>
+        </div>
+
+        <div id="backup-bar-panel" class="hidden" style="display:flex;gap:8px;flex-shrink:0;">
+          <button class="btn btn-primary btn-sm" onclick="createPanelBackup()">Создать облачный снапшот</button>
+        </div>
+
+        <div id="backup-bar-client" class="hidden" style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+          <span class="muted" style="font-size:12px;">Локальные резервные копии <span class="mono">_gtnh_client_backup_*</span> из папки инстанса Prism Launcher (работают без API-ключа).</span>
+        </div>
+
+        <div class="backups-split">
+          <div class="backups-list-wrap">
+            <div id="backups-list" class="backups-list"></div>
+          </div>
+
+          <div id="backup-detail-panel" class="detail-panel">
+            <div class="empty-state">
+              Выберите архив слева для рентген-проверки структуры или настройки безопасного отката (Overlay / Clean Replace).
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- VIEW 3: ОБНОВЛЕНИЕ СБОРКИ (PACK UPDATER)                         -->
+      <!-- ================================================================ -->
+      <section id="view-updater" class="view hidden">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Обновление сборки GTNH</h2>
+            <p class="view-subtitle">Zero-Loss обновление клиента Prism Launcher и сервера Bisquit.Host с сохранением кастомных модов и конфигов</p>
+          </div>
+        </div>
+
+        <!-- 4-Step Visual Stepper -->
+        <div class="stepper">
+          <div id="step-1" class="step-pill active"><span class="step-num">1</span><span>Режим</span></div>
+          <div id="step-2" class="step-pill active"><span class="step-num">2</span><span>Источники</span></div>
+          <div id="step-3" class="step-pill"><span class="step-num">3</span><span>Дифф и кастом</span></div>
+          <div id="step-4" class="step-pill"><span class="step-num">4</span><span>Выполнение</span></div>
+        </div>
+
+        <!-- Mode Selection -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">1. Что обновляем</h3>
+          </div>
+          <div class="mode-grid">
+            <button id="umode-client" class="mode-card" onclick="setUpdaterMode('client')">
+              <div class="mode-card-title">
+                <span>Только Клиент</span>
+                <span class="badge badge-ok">Без API</span>
+              </div>
+              <div class="mode-card-desc">Локальный инстанс Prism Launcher / MultiMC. Не требует подключения к серверу.</div>
+            </button>
+            <button id="umode-both" class="mode-card" onclick="setUpdaterMode('both')">
+              <div class="mode-card-title">
+                <span>Клиент + Сервер</span>
+                <span class="badge badge-accent">Полный цикл</span>
+              </div>
+              <div class="mode-card-desc">Последовательное обновление локального Prism и удалённого сервера Bisquit.Host.</div>
+            </button>
+            <button id="umode-server" class="mode-card" onclick="setUpdaterMode('server')">
+              <div class="mode-card-title">
+                <span>Только Сервер</span>
+                <span class="badge badge-info">Bisquit API</span>
+              </div>
+              <div class="mode-card-desc">Удалённое обновление через атомарный перенос с автоматическим откатом при сбое.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Client Sources -->
+        <div id="updater-client-block" class="card" style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card-header" style="margin-bottom:0;">
+            <h3 class="card-title">2A. Источники клиента (Prism Launcher)</h3>
+            <span class="badge badge-neutral">instance.cfg, saves, journeymap, options.txt защищены</span>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Папка инстанса Prism Launcher</label>
+            <div class="input-row">
+              <input id="upd-prism-dir" class="input mono" type="text" placeholder="D:\PrismLauncher\instances\GT_New_Horizons_..." oninput="invalidateUpdaterScan()">
+              <button class="btn" onclick="discoverPrism('upd')">Найти Prism</button>
+              <button class="btn" onclick="browsePrismDir()">Выбрать</button>
+            </div>
+            <div id="upd-prism-discover" class="discover-list hidden"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Клиентский архив GTNH (.zip)</label>
+            <div class="input-row">
+              <input id="upd-client-zip" class="input mono" type="text" placeholder="GT_New_Horizons_2.9.1_Java_17-26.zip" oninput="invalidateUpdaterScan()">
+              <button class="btn" onclick="browseClientZip()">Выбрать .zip</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Server Sources -->
+        <div id="updater-server-block" class="card" style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card-header" style="margin-bottom:0;">
+            <h3 class="card-title">2B. Источники сервера (Bisquit.Host)</h3>
+            <div class="tabs">
+              <button id="usrc-zip" class="tab-btn active" onclick="setServerSourceMode('zip')">Локальный .zip</button>
+              <button id="usrc-url" class="tab-btn" onclick="setServerSourceMode('url')">Прямой URL (/files/pull)</button>
+            </div>
+          </div>
+
+          <div id="upd-srv-zip-row" class="field">
+            <label class="field-label">Серверный архив GTNH (.zip, потоковая выгрузка)</label>
+            <div class="input-row">
+              <input id="upd-server-zip" class="input mono" type="text" placeholder="GT_New_Horizons_2.9.1_Server_Java_17-26.zip" oninput="invalidateUpdaterScan()">
+              <button class="btn" onclick="browseServerZip()">Выбрать .zip</button>
+            </div>
+          </div>
+
+          <div id="upd-srv-url-row" class="field hidden">
+            <label class="field-label">Прямая ссылка на серверный ZIP</label>
+            <input id="upd-server-url" class="input mono" type="text" placeholder="https://downloads.gtnewhorizons.com/ServerPacks/GT_New_Horizons_2.9.1_Server_Java_17-26.zip" oninput="invalidateUpdaterScan()">
+          </div>
+
+          <div class="grid-2">
+            <label class="toggle-card">
+              <input type="checkbox" id="upd-srv-safety" checked>
+              <div>
+                <div class="toggle-title">Страховочный архив в /backups</div>
+                <div class="toggle-desc">Сжать World + mods + config в pre_update_safety_*.tar.gz перед заменой</div>
+              </div>
+            </label>
+            <label class="toggle-card">
+              <input type="checkbox" id="upd-srv-autostart" checked>
+              <div>
+                <div class="toggle-title">Запустить сервер после обновления</div>
+                <div class="toggle-desc">Автоматический старт после успешного переноса (при сбое сработает авто-откат)</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Protected Configs -->
+        <div class="card" style="display:flex;flex-direction:column;gap:10px;">
+          <div class="card-header" style="margin-bottom:0;">
+            <h3 class="card-title">Защищённые пути внутри config/</h3>
+            <button class="btn btn-sm" onclick="applyClientVisualPreset()">+ Пресет Angelica / Шейдеры</button>
+          </div>
+          <div class="input-row">
+            <input id="upd-new-prot-cfg" class="input mono" type="text" placeholder="Относительный путь, напр.: angelica.cfg или GregTech/MachineStats.cfg">
+            <button class="btn" onclick="addProtectedConfig('upd-new-prot-cfg')">Добавить</button>
+          </div>
+          <div id="upd-prot-cfg-list" class="chip-list"></div>
+        </div>
+
+        <!-- Scan CTA -->
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button id="btn-upd-scan" class="btn btn-primary" onclick="analyzePackUpdate()">
+            Сканировать и сравнить файлы
+          </button>
+        </div>
+
+        <!-- Step 3: Diff & Confirmation -->
+        <div id="upd-analysis-section" class="hidden" style="display:flex;flex-direction:column;gap:12px;">
+          <div id="upd-errors-box" class="callout callout-danger hidden"></div>
+          <div id="upd-warnings-box" class="callout callout-warn hidden"></div>
+
+          <div id="upd-version-summary" class="grid-2"></div>
+
+          <!-- Client custom mods & resourcepacks -->
+          <div id="upd-client-custom-box" class="card hidden" style="display:flex;flex-direction:column;gap:10px;">
+            <div class="card-header" style="margin-bottom:0;">
+              <h3 class="card-title">Кастомные моды клиента (.minecraft/mods)</h3>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input id="filter-client-mods" class="input" style="width:160px;padding:4px 8px;font-size:11.5px;" placeholder="Фильтр..." oninput="filterCheckList('upd-client-mods-list', this.value)">
+                <button class="btn btn-sm btn-ghost" onclick="toggleAllUpdaterChecks('client-mod', true)">Все</button>
+                <button class="btn btn-sm btn-ghost" onclick="toggleAllUpdaterChecks('client-mod', false)">Снять</button>
+              </div>
+            </div>
+            <div id="upd-client-mods-list" class="check-scroll"></div>
+
+            <div class="card-header" style="margin-bottom:0;margin-top:6px;">
+              <h3 class="card-title">Пользовательские ресурспаки (.minecraft/resourcepacks)</h3>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-sm btn-ghost" onclick="toggleAllUpdaterChecks('client-rp', true)">Все</button>
+                <button class="btn btn-sm btn-ghost" onclick="toggleAllUpdaterChecks('client-rp', false)">Снять</button>
+              </div>
+            </div>
+            <div id="upd-client-rps-list" class="check-scroll"></div>
+          </div>
+
+          <!-- Server custom mods -->
+          <div id="upd-server-custom-box" class="card hidden" style="display:flex;flex-direction:column;gap:10px;">
+            <div class="card-header" style="margin-bottom:0;">
+              <h3 class="card-title">Кастомные моды сервера (/mods)</h3>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input id="filter-server-mods" class="input" style="width:160px;padding:4px 8px;font-size:11.5px;" placeholder="Фильтр..." oninput="filterCheckList('upd-server-mods-list', this.value)">
+                <button class="btn btn-sm" onclick="addExtraServerMods()">+ Добавить локальный .jar</button>
+                <button class="btn btn-sm btn-ghost" onclick="toggleAllUpdaterChecks('server-mod', true)">Все</button>
+                <button class="btn btn-sm btn-ghost" onclick="toggleAllUpdaterChecks('server-mod', false)">Снять</button>
+              </div>
+            </div>
+            <div id="upd-server-mods-list" class="check-scroll"></div>
+          </div>
+
+          <!-- Execute Bar -->
+          <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:14px;">
+            <div id="upd-footer-hint" style="font-size:12.5px;color:var(--text-secondary);"></div>
+            <button id="btn-upd-execute" class="btn btn-primary" disabled onclick="executePackUpdate()">
+              Запустить обновление
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Execution Progress Card -->
+        <div id="upd-progress-card" class="card hidden" style="display:flex;flex-direction:column;gap:10px;">
+          <div class="card-header" style="margin-bottom:0;">
+            <h3 class="card-title" id="upd-prog-title">Выполнение обновления...</h3>
+            <span id="upd-prog-pct" class="mono" style="color:var(--accent);font-weight:600;">0%</span>
+          </div>
+          <div class="progress-track" style="height:7px;">
+            <div id="upd-prog-bar" class="progress-fill" style="width:0%"></div>
+          </div>
+          <div id="upd-prog-detail" class="muted" style="font-size:12px;"></div>
+          <div id="upd-live-log" class="details-box" style="max-height:170px;"></div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- VIEW 4: СТУДИЯ КОНФИГОВ                                          -->
+      <!-- ================================================================ -->
+      <section id="view-configs" class="view hidden">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Студия Конфигов</h2>
+            <p class="view-subtitle">Редактирование серверных параметров ServerUtilities, server.properties и флагов JVM</p>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <div class="tabs">
+              <button id="ctab-su" class="tab-btn active" onclick="switchCfgTab('su')">ServerUtilities</button>
+              <button id="ctab-props" class="tab-btn" onclick="switchCfgTab('props')">server.properties</button>
+              <button id="ctab-jvm" class="tab-btn" onclick="switchCfgTab('jvm')">java9args.txt (JVM)</button>
+            </div>
+            <button class="btn btn-sm" onclick="loadConfigsStudio()">Загрузить с сервера</button>
+          </div>
+        </div>
+
+        <div id="cfg-unconfigured" class="card hidden">
+          <div class="empty-state">
+            Сервер Bisquit.Host не подключён. Укажите API-ключ и ID сервера в разделе «Подключение», чтобы редактировать конфиги.
+            <div style="margin-top:12px;">
+              <button class="btn btn-primary" onclick="switchView('settings')">Открыть настройки подключения</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cfg-studio-body" style="display:flex;flex-direction:column;gap:14px;">
+          <!-- ServerUtilities -->
+          <div id="cbody-su" class="card" style="display:flex;flex-direction:column;gap:12px;">
+            <div class="grid-2">
+              <label class="toggle-card">
+                <input id="su-enable" type="checkbox">
+                <div>
+                  <div class="toggle-title">Автобэкапы мода (enable_backups)</div>
+                  <div class="toggle-desc">Включает автоматическое сохранение мира по расписанию</div>
+                </div>
+              </label>
+              <label class="toggle-card">
+                <input id="su-chunkload" type="checkbox">
+                <div>
+                  <div class="toggle-title">Прогрузка чанков (chunk_loading)</div>
+                  <div class="toggle-desc">Разрешает игрокам загружать заприваченные чанки через карту SU</div>
+                </div>
+              </label>
+              <label class="toggle-card">
+                <input id="su-claimed" type="checkbox">
+                <div>
+                  <div class="toggle-title">Только приват (only_backup_claimed_chunks)</div>
+                  <div class="toggle-desc">Ускоряет бэкап и уменьшает размер архива — восстанавливается через Overlay</div>
+                </div>
+              </label>
+              <label class="toggle-card">
+                <input id="su-regions" type="checkbox">
+                <div>
+                  <div class="toggle-title">Целые регионы с приватом (.mca)</div>
+                  <div class="toggle-desc">Сохраняет целиком файлы регионов (512×512), содержащие приваты</div>
+                </div>
+              </label>
+            </div>
+            <label class="toggle-card">
+              <input id="su-online" type="checkbox">
+              <div>
+                <div class="toggle-title">Только при игроках онлайн (need_online_players)</div>
+                <div class="toggle-desc">Не создаёт лишние бэкапы, если на сервере никого нет</div>
+              </div>
+            </label>
+            <div class="grid-2">
+              <div class="field">
+                <label class="field-label">Интервал бэкапов (backup_timer)</label>
+                <input id="su-timer" class="input mono" type="text" placeholder="1h">
+                <span class="field-hint">Примеры: 30m, 1h, 2h</span>
+              </div>
+              <div class="field">
+                <label class="field-label">Хранить последних архивов (backups_to_keep)</label>
+                <input id="su-keep" class="input mono" type="number" min="1" max="50">
+                <span class="field-hint">Старые архивы автоматически удаляются</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- server.properties -->
+          <div id="cbody-props" class="card hidden" style="display:flex;flex-direction:column;gap:12px;">
+            <div class="grid-2">
+              <div class="field">
+                <label class="field-label">Дальность прорисовки (view-distance)</label>
+                <input id="pr-view" class="input mono" type="number" min="3" max="16">
+                <span class="field-hint">Для GTNH оптимально 8 (меньше нагрузка на TPS)</span>
+              </div>
+              <div class="field">
+                <label class="field-label">Пауза пустого сервера (сек)</label>
+                <input id="pr-pause" class="input mono" type="number" min="0">
+                <span class="field-hint">0 — не ставить на паузу (важно для чанклоадеров)</span>
+              </div>
+              <div class="field">
+                <label class="field-label">Максимум игроков (max-players)</label>
+                <input id="pr-maxp" class="input mono" type="number" min="1">
+              </div>
+              <div class="field">
+                <label class="field-label">Сложность (difficulty)</label>
+                <select id="pr-diff" class="select">
+                  <option value="0">0 — Мирная (Peaceful)</option>
+                  <option value="1">1 — Лёгкая (Easy)</option>
+                  <option value="2">2 — Нормальная (Normal)</option>
+                  <option value="3">3 — Сложная (Hard — стандарт GTNH)</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <label class="toggle-card">
+                <input id="pr-whitelist" type="checkbox">
+                <div>
+                  <div class="toggle-title">Белый список (white-list)</div>
+                  <div class="toggle-desc">Пускать только игроков из whitelist.json</div>
+                </div>
+              </label>
+              <label class="toggle-card">
+                <input id="pr-pvp" type="checkbox">
+                <div>
+                  <div class="toggle-title">Разрешить PVP</div>
+                  <div class="toggle-desc">Урон между игроками</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- JVM Flags -->
+          <div id="cbody-jvm" class="card hidden" style="display:flex;flex-direction:column;gap:10px;">
+            <div class="card-header" style="margin-bottom:0;">
+              <h3 class="card-title">Флаги запуска JVM (/java9args.txt)</h3>
+              <button class="btn btn-sm" onclick="applyG1GCPreset()">Подставить оптимум G1GC</button>
+            </div>
+            <textarea id="jvm-text" class="textarea mono" rows="12" placeholder="-XX:+UseG1GC ..."></textarea>
+            <span class="field-hint">Изменения вступят в силу после перезагрузки сервера.</span>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;">
+            <button class="btn btn-primary" onclick="saveAllConfigs()">Сохранить настройки на сервере</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================ -->
+      <!-- VIEW 5: ПОДКЛЮЧЕНИЕ И НАСТРОЙКИ                                  -->
+      <!-- ================================================================ -->
+      <section id="view-settings" class="view hidden">
+        <div class="view-header">
+          <div>
+            <h2 class="view-title">Подключение и Настройки</h2>
+            <p class="view-subtitle">Доступ к Bisquit.Host API, путь к локальному Prism Launcher и список защищённых конфигов</p>
+          </div>
+        </div>
+
+        <div class="card" style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card-header" style="margin-bottom:0;">
+            <h3 class="card-title">Подключение к панели Bisquit.Host (Calagopus / Pterodactyl)</h3>
+            <span id="settings-conn-badge" class="badge badge-neutral">Не настроено</span>
+          </div>
+
+          <div class="field">
+            <label class="field-label">URL панели управления</label>
+            <input id="cfg-url" class="input mono" type="text" placeholder="https://mgr.bisquit.host">
+          </div>
+
+          <div class="field">
+            <label class="field-label">Client API Key</label>
+            <div class="input-row">
+              <input id="cfg-key" class="input mono" type="password" placeholder="c7sp_... (создаётся в профиле панели -> API Credentials)">
+              <button class="btn btn-sm" onclick="toggleApiKeyVis()">Показать</button>
+            </div>
+            <span class="field-hint">Ключ хранится строго локально в bisquit_config.json и никогда не передаётся третьим сторонам.</span>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label class="field-label">ID сервера (короткий ID или UUID)</label>
+              <input id="cfg-id" class="input mono" type="text" placeholder="например: a1b2c3d4">
+            </div>
+            <div class="field">
+              <label class="field-label">Макс. облачных бэкапов панели</label>
+              <input id="cfg-max" class="input mono" type="number" min="1" max="20" value="3">
+            </div>
+          </div>
+
+          <div id="conn-test-result" class="callout hidden"></div>
+
+          <div style="display:flex;justify-content:flex-end;gap:8px;">
+            <button id="btn-test-conn" class="btn" onclick="testConnection()">Проверить подключение</button>
+            <button class="btn btn-primary" onclick="saveSettings()">Сохранить подключение</button>
+          </div>
+        </div>
+
+        <div class="card" style="display:flex;flex-direction:column;gap:12px;">
+          <div class="card-header" style="margin-bottom:0;">
+            <h3 class="card-title">Локальный клиент Prism Launcher</h3>
+          </div>
+          <div class="field">
+            <label class="field-label">Папка инстанса GTNH по умолчанию</label>
+            <div class="input-row">
+              <input id="set-prism-dir" class="input mono" type="text" placeholder="D:\PrismLauncher\instances\GT_New_Horizons_...">
+              <button class="btn" onclick="discoverPrism('set')">Найти Prism</button>
+              <button class="btn" onclick="browsePrismFromSettings()">Выбрать</button>
+            </div>
+            <div id="set-prism-discover" class="discover-list hidden"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label">Защищённые конфиги в config/ (профиль апдейтера)</label>
+            <div class="input-row">
+              <input id="set-new-prot-cfg" class="input mono" type="text" placeholder="angelica.cfg или GregTech/MachineStats.cfg">
+              <button class="btn" onclick="addProtectedConfig('set-new-prot-cfg')">Добавить</button>
+            </div>
+            <div id="set-prot-cfg-list" class="chip-list" style="margin-top:6px;"></div>
+          </div>
+        </div>
+
+        <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:14px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;">Расположение локальных настроек</div>
+            <div id="data-dir-text" class="mono muted" style="font-size:11.5px;margin-top:3px;">—</div>
+          </div>
+          <button class="btn btn-sm" onclick="openDataDir()">Открыть папку</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-stack" class="toast-stack"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

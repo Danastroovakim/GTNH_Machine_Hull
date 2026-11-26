@@ -1,0 +1,4245 @@
+{
+  "/api/client/servers/{server}/files/chmod": {
+    "put": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "put_api_client_servers_server_files_chmod",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "file",
+                      "mode"
+                    ],
+                    "properties": {
+                      "file": {
+                        "$ref": "#/components/schemas/CompactString"
+                      },
+                      "mode": {
+                        "$ref": "#/components/schemas/CompactString"
+                      },
+                      "recursive": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "updated"
+                ],
+                "properties": {
+                  "updated": {
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/compress": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_compress",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "format",
+                "files"
+              ],
+              "properties": {
+                "name": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ]
+                },
+                "format": {
+                  "$ref": "#/components/schemas/ArchiveFormat"
+                },
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CompactString"
+                  }
+                },
+                "foreground": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "entry"
+                ],
+                "properties": {
+                  "entry": {
+                    "$ref": "#/components/schemas/DirectoryEntry"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "identifier"
+                ],
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/contents": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_contents",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "file",
+          "in": "query",
+          "description": "The file to retrieve contents from",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/path/to/file.txt"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/copy": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_copy",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "path"
+              ],
+              "properties": {
+                "path": {
+                  "$ref": "#/components/schemas/CompactString"
+                },
+                "destination": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ]
+                },
+                "overwrite": {
+                  "type": "boolean"
+                },
+                "foreground": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "entry"
+                ],
+                "properties": {
+                  "entry": {
+                    "$ref": "#/components/schemas/DirectoryEntry"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "identifier"
+                ],
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/copy-many": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_copy-many",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "from",
+                      "to"
+                    ],
+                    "properties": {
+                      "from": {
+                        "type": "string"
+                      },
+                      "to": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "overwrite": {
+                  "type": "boolean"
+                },
+                "foreground": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "copied",
+                  "skipped"
+                ],
+                "properties": {
+                  "copied": {
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 0
+                  },
+                  "skipped": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DirectoryEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "identifier",
+                  "skipped"
+                ],
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "skipped": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DirectoryEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/copy-remote": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_copy-remote",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files",
+                "destination",
+                "destination_server"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "from",
+                      "to"
+                    ],
+                    "properties": {
+                      "from": {
+                        "type": "string"
+                      },
+                      "to": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "destination": {
+                  "$ref": "#/components/schemas/CompactString"
+                },
+                "destination_server": {
+                  "type": "string",
+                  "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "foreground": {
+                  "type": "boolean"
+                },
+                "overwrite": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "skipped"
+                ],
+                "properties": {
+                  "skipped": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DirectoryEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "identifier",
+                  "skipped"
+                ],
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "skipped": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DirectoryEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/copy-remote-many": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_copy-remote-many",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files",
+                "destination",
+                "destination_servers"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "from",
+                      "to"
+                    ],
+                    "properties": {
+                      "from": {
+                        "type": "string"
+                      },
+                      "to": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "destination": {
+                  "$ref": "#/components/schemas/CompactString"
+                },
+                "destination_servers": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "maxItems": 25,
+                  "minItems": 1
+                },
+                "overwrite": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "results"
+                ],
+                "properties": {
+                  "results": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ResponseResult"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/create-directory": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_create-directory",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "name"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "name": {
+                  "$ref": "#/components/schemas/CompactString"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/create-symlink": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_create-symlink",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "link",
+                "target"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "link": {
+                  "$ref": "#/components/schemas/CompactString"
+                },
+                "target": {
+                  "$ref": "#/components/schemas/CompactString"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/decompress": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_decompress",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "file"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "file": {
+                  "$ref": "#/components/schemas/CompactString"
+                },
+                "foreground": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "identifier"
+                ],
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/delete": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_delete",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CompactString"
+                  }
+                },
+                "permanent": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "deleted",
+                  "entries"
+                ],
+                "properties": {
+                  "deleted": {
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 0
+                  },
+                  "entries": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/TrashEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/directory-sizes": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_directory-sizes",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "directory",
+          "in": "query",
+          "description": "The directory to break down by size",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/"
+        },
+        {
+          "name": "depth",
+          "in": "query",
+          "description": "How many levels of subdirectories to include, 1 to 4",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "example": 2
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "directory_sizes"
+                ],
+                "properties": {
+                  "directory_sizes": {
+                    "$ref": "#/components/schemas/DirectorySizes"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/download": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_download",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "root",
+          "in": "query",
+          "description": "The root directory to download from",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/path/to/root"
+        },
+        {
+          "name": "files",
+          "in": "query",
+          "description": "The file(s) to download",
+          "required": true,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "example": "/path/to/file.txt"
+        },
+        {
+          "name": "directory",
+          "in": "query",
+          "description": "Whether the file is a directory",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          },
+          "example": "false"
+        },
+        {
+          "name": "archive_format",
+          "in": "query",
+          "description": "The format of the archive to download",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/StreamableArchiveFormat"
+          },
+          "example": "tar_gz"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/fingerprint": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_fingerprint",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "file",
+          "in": "query",
+          "description": "The file to retrieve fingerprints from",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/path/to/file.txt"
+        },
+        {
+          "name": "algorithm",
+          "in": "query",
+          "description": "The algorithm to use for generating the fingerprint",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Algorithm"
+          },
+          "example": "sha256"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "fingerprint"
+                ],
+                "properties": {
+                  "fingerprint": {
+                    "$ref": "#/components/schemas/CompactString"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/ignore-matches": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_ignore-matches",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "patterns"
+              ],
+              "properties": {
+                "patterns": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CompactString"
+                  },
+                  "maxItems": 32
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "counts"
+                ],
+                "properties": {
+                  "counts": {
+                    "type": "array",
+                    "items": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "format": "int64",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/largest-directories": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_largest-directories",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "directory",
+          "in": "query",
+          "description": "The directory to retrieve largest directories from",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "largest_directories"
+                ],
+                "properties": {
+                  "largest_directories": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DirectoryEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/lines": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_lines",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "file",
+          "in": "query",
+          "description": "The file to retrieve contents from",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/path/to/file.txt"
+        },
+        {
+          "name": "start_line",
+          "in": "query",
+          "description": "First line, one-based and inclusive",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        {
+          "name": "end_line",
+          "in": "query",
+          "description": "Last line, one-based and inclusive",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Response200"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/list": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_list",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "description": "The page number for pagination",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "example": "1"
+        },
+        {
+          "name": "per_page",
+          "in": "query",
+          "description": "The number of items per page",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "example": "10"
+        },
+        {
+          "name": "directory",
+          "in": "query",
+          "description": "The directory to list files from",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/"
+        },
+        {
+          "name": "sort",
+          "in": "query",
+          "description": "The sorting mode to use for the files",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/DirectorySortingMode"
+          },
+          "example": "name_asc"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "is_filesystem_primary",
+                  "is_filesystem_writable",
+                  "is_filesystem_fast",
+                  "entries",
+                  "uploads"
+                ],
+                "properties": {
+                  "is_filesystem_primary": {
+                    "type": "boolean"
+                  },
+                  "is_filesystem_writable": {
+                    "type": "boolean"
+                  },
+                  "is_filesystem_fast": {
+                    "type": "boolean"
+                  },
+                  "entries": {
+                    "type": "object",
+                    "required": [
+                      "total",
+                      "per_page",
+                      "page",
+                      "data"
+                    ],
+                    "properties": {
+                      "total": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "per_page": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "page": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                            "mode",
+                            "mode_bits",
+                            "size",
+                            "size_physical",
+                            "editable",
+                            "inner_editable",
+                            "directory",
+                            "file",
+                            "symlink",
+                            "virtual",
+                            "mime",
+                            "created",
+                            "modified"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "string"
+                            },
+                            "mode_bits": {
+                              "type": "string"
+                            },
+                            "size": {
+                              "type": "integer",
+                              "format": "int64",
+                              "minimum": 0
+                            },
+                            "size_physical": {
+                              "type": "integer",
+                              "format": "int64",
+                              "minimum": 0
+                            },
+                            "editable": {
+                              "type": "boolean"
+                            },
+                            "inner_editable": {
+                              "type": "boolean"
+                            },
+                            "directory": {
+                              "type": "boolean"
+                            },
+                            "file": {
+                              "type": "boolean"
+                            },
+                            "symlink": {
+                              "type": "boolean"
+                            },
+                            "virtual": {
+                              "type": "boolean"
+                            },
+                            "mime": {
+                              "type": "string"
+                            },
+                            "created": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "modified": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "uploads": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/UploadEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/operations": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_operations",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "operations"
+                ],
+                "properties": {
+                  "operations": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/operations/{operation}": {
+    "delete": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "delete_api_client_servers_server_files_operations_operation",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "operation",
+          "in": "path",
+          "description": "The operation ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/pull": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_pull",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "name": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ]
+                },
+                "use_header": {
+                  "type": "boolean"
+                },
+                "foreground": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "202": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "identifier"
+                ],
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/pull/query": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_pull_query",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "$ref": "#/components/schemas/CompactString"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "query_result"
+                ],
+                "properties": {
+                  "query_result": {
+                    "type": "object",
+                    "required": [
+                      "final_url",
+                      "headers"
+                    ],
+                    "properties": {
+                      "file_name": {
+                        "oneOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      },
+                      "file_size": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "format": "int64",
+                        "minimum": 0
+                      },
+                      "final_url": {
+                        "type": "string"
+                      },
+                      "headers": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "propertyNames": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/rename": {
+    "put": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "put_api_client_servers_server_files_rename",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "from",
+                      "to"
+                    ],
+                    "properties": {
+                      "from": {
+                        "type": "string"
+                      },
+                      "to": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "renamed"
+                ],
+                "properties": {
+                  "renamed": {
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/revisions": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_revisions",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "file",
+          "in": "query",
+          "description": "The file to retrieve revisions from",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/path/to/file.txt"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "revisions"
+                ],
+                "properties": {
+                  "revisions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Revision"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/revisions/{revision}": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_revisions_revision",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "revision",
+          "in": "path",
+          "description": "The revision ID",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "example": "1"
+        },
+        {
+          "name": "file",
+          "in": "query",
+          "description": "The file the revision belongs to",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/path/to/file.txt"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/search": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_search",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "root": {
+                  "$ref": "#/components/schemas/CompactString"
+                },
+                "path_filter": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "include",
+                        "exclude",
+                        "case_insensitive"
+                      ],
+                      "properties": {
+                        "include": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "exclude": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "case_insensitive": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "size_filter": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "min",
+                        "max"
+                      ],
+                      "properties": {
+                        "min": {
+                          "type": "integer",
+                          "format": "int64",
+                          "minimum": 0
+                        },
+                        "max": {
+                          "type": "integer",
+                          "format": "int64",
+                          "minimum": 0
+                        }
+                      }
+                    }
+                  ]
+                },
+                "content_filter": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "query",
+                        "max_search_size",
+                        "include_unmatched",
+                        "case_insensitive"
+                      ],
+                      "properties": {
+                        "query": {
+                          "type": "string"
+                        },
+                        "max_search_size": {
+                          "type": "integer",
+                          "format": "int64",
+                          "minimum": 0
+                        },
+                        "include_unmatched": {
+                          "type": "boolean"
+                        },
+                        "case_insensitive": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "match_context": {
+                  "oneOf": [
+                    {
+                      "type": "null"
+                    },
+                    {
+                      "type": "object",
+                      "required": [
+                        "before",
+                        "after",
+                        "max_matches"
+                      ],
+                      "properties": {
+                        "before": {
+                          "type": "integer",
+                          "format": "int64",
+                          "minimum": 0
+                        },
+                        "after": {
+                          "type": "integer",
+                          "format": "int64",
+                          "minimum": 0
+                        },
+                        "max_matches": {
+                          "type": "integer",
+                          "format": "int64",
+                          "minimum": 0
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "entries"
+                ],
+                "properties": {
+                  "entries": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DirectoryEntry"
+                    }
+                  },
+                  "content_matches": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "$ref": "#/components/schemas/ContentMatches"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/sqlite-query": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_sqlite-query",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "file",
+                "query"
+              ],
+              "properties": {
+                "file": {
+                  "$ref": "#/components/schemas/CompactString"
+                },
+                "query": {
+                  "type": "string",
+                  "maxLength": 65535,
+                  "minLength": 1
+                },
+                "rows": {
+                  "type": "integer",
+                  "format": "int32",
+                  "maximum": 1000,
+                  "minimum": 1
+                },
+                "read_only": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "results"
+                ],
+                "properties": {
+                  "results": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/QueryResultSet"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "408": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/stat": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_stat",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files"
+              ],
+              "properties": {
+                "root": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactString"
+                    }
+                  ],
+                  "default": "/"
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CompactString"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "entries"
+                ],
+                "properties": {
+                  "entries": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DirectoryEntry"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/trash": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_trash",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "description": "The page number for pagination",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "example": "1"
+        },
+        {
+          "name": "per_page",
+          "in": "query",
+          "description": "The number of items per page",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "example": "10"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "entries"
+                ],
+                "properties": {
+                  "entries": {
+                    "type": "object",
+                    "required": [
+                      "total",
+                      "per_page",
+                      "page",
+                      "data"
+                    ],
+                    "properties": {
+                      "total": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "per_page": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "page": {
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "uuid",
+                            "name",
+                            "path",
+                            "directory",
+                            "file",
+                            "size",
+                            "deleted"
+                          ],
+                          "properties": {
+                            "uuid": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "path": {
+                              "type": "string"
+                            },
+                            "directory": {
+                              "type": "boolean"
+                            },
+                            "file": {
+                              "type": "boolean"
+                            },
+                            "size": {
+                              "type": "integer",
+                              "format": "int64",
+                              "minimum": 0
+                            },
+                            "deleted": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    },
+    "delete": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "delete_api_client_servers_server_files_trash",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "selector"
+              ],
+              "properties": {
+                "selector": {
+                  "$ref": "#/components/schemas/TrashSelector"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "deleted"
+                ],
+                "properties": {
+                  "deleted": {
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/trash/restore": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_trash_restore",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "entries"
+              ],
+              "properties": {
+                "entries": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "uuid"
+                    ],
+                    "properties": {
+                      "uuid": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "path": {
+                        "oneOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                },
+                "overwrite": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "restored",
+                  "conflicts"
+                ],
+                "properties": {
+                  "restored": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/TrashEntry"
+                    }
+                  },
+                  "conflicts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "uuid",
+                        "destination"
+                      ],
+                      "properties": {
+                        "uuid": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "destination": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                            "mode",
+                            "mode_bits",
+                            "size",
+                            "size_physical",
+                            "editable",
+                            "inner_editable",
+                            "directory",
+                            "file",
+                            "symlink",
+                            "virtual",
+                            "mime",
+                            "created",
+                            "modified"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "string"
+                            },
+                            "mode_bits": {
+                              "type": "string"
+                            },
+                            "size": {
+                              "type": "integer",
+                              "format": "int64",
+                              "minimum": 0
+                            },
+                            "size_physical": {
+                              "type": "integer",
+                              "format": "int64",
+                              "minimum": 0
+                            },
+                            "editable": {
+                              "type": "boolean"
+                            },
+                            "inner_editable": {
+                              "type": "boolean"
+                            },
+                            "directory": {
+                              "type": "boolean"
+                            },
+                            "file": {
+                              "type": "boolean"
+                            },
+                            "symlink": {
+                              "type": "boolean"
+                            },
+                            "virtual": {
+                              "type": "boolean"
+                            },
+                            "mime": {
+                              "type": "string"
+                            },
+                            "created": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "modified": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/trash/{entry}": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_trash_entry",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "entry",
+          "in": "path",
+          "description": "The trash entry ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "entry"
+                ],
+                "properties": {
+                  "entry": {
+                    "$ref": "#/components/schemas/TrashEntry"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/trash/{entry}/restore": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_trash_entry_restore",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "entry",
+          "in": "path",
+          "description": "The trash entry ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "files"
+              ],
+              "properties": {
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "from"
+                    ],
+                    "properties": {
+                      "from": {
+                        "type": "string"
+                      },
+                      "to": {
+                        "oneOf": [
+                          {
+                            "type": "null"
+                          },
+                          {
+                            "type": "string"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "maxItems": 100,
+                  "minItems": 1
+                },
+                "overwrite": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "restored",
+                  "conflicts"
+                ],
+                "properties": {
+                  "restored": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "from",
+                        "to"
+                      ],
+                      "properties": {
+                        "from": {
+                          "type": "string"
+                        },
+                        "to": {
+                          "type": "string"
+                        },
+                        "restoration": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "uuid"
+                        }
+                      }
+                    }
+                  },
+                  "conflicts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "from",
+                        "destination"
+                      ],
+                      "properties": {
+                        "from": {
+                          "type": "string"
+                        },
+                        "destination": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                            "mode",
+                            "mode_bits",
+                            "size",
+                            "size_physical",
+                            "editable",
+                            "inner_editable",
+                            "directory",
+                            "file",
+                            "symlink",
+                            "virtual",
+                            "mime",
+                            "created",
+                            "modified"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string"
+                            },
+                            "mode": {
+                              "type": "string"
+                            },
+                            "mode_bits": {
+                              "type": "string"
+                            },
+                            "size": {
+                              "type": "integer",
+                              "format": "int64",
+                              "minimum": 0
+                            },
+                            "size_physical": {
+                              "type": "integer",
+                              "format": "int64",
+                              "minimum": 0
+                            },
+                            "editable": {
+                              "type": "boolean"
+                            },
+                            "inner_editable": {
+                              "type": "boolean"
+                            },
+                            "directory": {
+                              "type": "boolean"
+                            },
+                            "file": {
+                              "type": "boolean"
+                            },
+                            "symlink": {
+                              "type": "boolean"
+                            },
+                            "virtual": {
+                              "type": "boolean"
+                            },
+                            "mime": {
+                              "type": "string"
+                            },
+                            "created": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "modified": {
+                              "type": "string",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "entry": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "$ref": "#/components/schemas/TrashEntry"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "501": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/trash/{entry}/return": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_trash_entry_return",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "entry",
+          "in": "path",
+          "description": "The trash entry ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "restorations"
+              ],
+              "properties": {
+                "restorations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "maxItems": 100,
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "returned",
+                  "unavailable"
+                ],
+                "properties": {
+                  "returned": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
+                  "unavailable": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  },
+                  "entry": {
+                    "oneOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "$ref": "#/components/schemas/TrashEntry"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "501": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/upload": {
+    "get": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "get_api_client_servers_server_files_upload",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/api/client/servers/{server}/files/write": {
+    "post": {
+      "tags": [
+        "/api/client"
+      ],
+      "operationId": "post_api_client_servers_server_files_write",
+      "parameters": [
+        {
+          "name": "server",
+          "in": "path",
+          "description": "The server ID",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "example": "123e4567-e89b-12d3-a456-426614174000"
+        },
+        {
+          "name": "file",
+          "in": "query",
+          "description": "The file to write contents to",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "example": "/path/to/file.txt"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "revision_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        },
+        "417": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

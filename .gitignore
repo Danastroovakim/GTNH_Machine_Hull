@@ -1,0 +1,21 @@
+# Local user secrets & personal updater profiles (NEVER commit!)
+bisquit_config.json
+gtnh_updater_profile.json
+
+# Local shortcuts, logs & agent/project memory
+RUN.lnk
+.projectmem/
+PROJECT_MAP.md
+plan.md
+summary.md
+*.log
+
+# Python & build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+*.spec
+.venv/
+venv/

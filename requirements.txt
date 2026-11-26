@@ -1,0 +1,7 @@
+# Runtime dependencies
+pywebview>=5.0
+requests>=2.31
+
+# Packaging & asset build dependencies (build_exe.py)
+Pillow>=10.0
+pyinstaller>=6.0
